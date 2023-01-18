@@ -1,8 +1,7 @@
 import os, glob
 import json
 
-from django.shortcuts import render
-from rest_framework import viewsets, mixins, generics, views
+from rest_framework import viewsets, mixins, views
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .models import DeviceModel, ContentEventModel
