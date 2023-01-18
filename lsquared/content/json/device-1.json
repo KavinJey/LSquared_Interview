@@ -1,1 +1,1 @@
-{}
+{"device": {"info": {"id": 15, "name": "device-1"}}, "content": [{"id": 8, "type": "image", "fileSize": 3311, "fileName": "delhi.jpg", "st": "12:00:00", "et": "17:59:59"}]}{"device": {"info": {"id": 15, "name": "device-1"}}, "content": [{"id": 8, "type": "image", "fileSize": 3311, "fileName": "delhi.jpg", "st": "12:00:00", "et": "17:59:59"}, {"id": 9, "type": "image", "fileSize": 3311, "fileName": "delhi.jpg", "st": "12:00:00", "et": "17:59:59"}]}
