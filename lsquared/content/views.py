@@ -1,4 +1,5 @@
 import os, glob 
+import json 
 
 from django.shortcuts import render
 from rest_framework import viewsets, mixins, generics, views
@@ -23,7 +24,7 @@ class ImageListView(views.APIView):
     """
     Return list of images in /content/assets 
     with name, size, type
-    """
+    """ 
     print(os.getcwd())
     asset_path = f'{os.getcwd()}/lsquared/content/assets'
     assets = os.listdir(asset_path)
@@ -39,13 +40,55 @@ class ImageListView(views.APIView):
 
 class ContentEventCreateView(views.APIView):
   permission_classes = (AllowAny, )
-  
+
   def post(self, request):
     """
     Creates JSON for every device
     as well as creates ContentEvent model
     to db 
+
+    { devices { [DeviceModel] } 
+      content { [Images]} 
+      st time
+      et time
+    }
     """
+
+    payload = request.data
+    devices_list = payload['devices']
+    content_list = payload['content']
+    json_folder_path = f'{os.getcwd()}/lsquared/content/json'
+    for device in devices_list:
+      for content in content_list:
+        content_event = ContentEventModel.objects.create(device_id=device['id'], content_name=content['name'], content_type=content['type'], content_size=content['size'], start_time=payload['st'], end_time=payload['et'])
+
+        json_file_path = f'{json_folder_path}/{device["name"]}.json'
+        file_exists = os.path.isfile(json_file_path)
+        if file_exists:
+            with open(json_file_path, 'r+') as json_file:
+              content_event = json.load(json_file)
+              print(content_event)
+
+        else:
+          with open(json_file_path, 'x') as json_file:
+            content_event = {}
+            json_file.write(json.dumps(content_event))
+          json_file.close()
+
+
+
+    print(payload)
+
+    # Save data to table with 
+    # id, deviceid, content_+name, content_type
+    # content_size, start_time, end_time
+
+
+    # create json for each device in payload
+    # if user submits post for device that already has content, add content to json 
+
+
+
     content = ContentEventModel.objects.all()
 
-    return Response(content)
+    return Response(status=201)

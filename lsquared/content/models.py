@@ -6,6 +6,7 @@ class DeviceModel(models.Model):
 
 
 class ContentEventModel(models.Model):
+  device_id = models.BigIntegerField()
   content_name = models.CharField(max_length=150)
   content_type = models.CharField(max_length=150)
   content_size  = models.CharField(max_length=150)

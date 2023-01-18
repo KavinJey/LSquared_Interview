@@ -1,10 +1,5 @@
 # lsquared_interview
 
-[![Build Status](https://travis-ci.org/kavinjey/lsquared_interview.svg?branch=master)](https://travis-ci.org/kavinjey/lsquared_interview)
-[![Built with](https://img.shields.io/badge/Built_with-Cookiecutter_Django_Rest-F7B633.svg)](https://github.com/agconti/cookiecutter-django-rest)
-
-Image JSON API for content. Check out the project's [documentation](http://kavinjey.github.io/lsquared_interview/).
-
 # Prerequisites
 
 - [Docker](https://docs.docker.com/docker-for-mac/install/)
@@ -30,3 +25,17 @@ pipenv install
 python manage.py migrate
 python manage.py runserver
 ```
+
+# Files of Interest
+
+- Note ASset folder
+- Note views, serializers, etc
+
+# Sql query
+
+From user you receive
+start_time
+end_time
+
+from table of start_time, end_time, id
+find empty timeslots

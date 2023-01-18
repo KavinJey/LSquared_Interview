@@ -108,6 +108,9 @@ class Common(Configuration):
     # https://docs.djangoproject.com/en/dev/ref/settings/#debug
     DEBUG = strtobool(os.getenv('DJANGO_DEBUG', 'no'))
 
+    # 
+    DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
+
     # Password Validation
     # https://docs.djangoproject.com/en/2.0/topics/auth/passwords/#module-django.contrib.auth.password_validation
     AUTH_PASSWORD_VALIDATORS = [
