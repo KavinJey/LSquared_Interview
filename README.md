@@ -5,9 +5,9 @@ Create API from where the user can select from availabile images, select a time 
 Routes:
 
 ```(python)
-'http://localhost:8000/api/v1/images/' # GET for images
-'http://localhost:8000/api/v1/devices/' # GET for devices
-'http://localhost:8000/api/v1/content' # POST for content
+http://localhost:8000/api/v1/images/ # GET for images
+http://localhost:8000/api/v1/devices/ # GET for devices
+http://localhost:8000/api/v1/content # POST for content
 ```
 
 # Prerequisites
