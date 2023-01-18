@@ -4,6 +4,11 @@
 
 - [Docker](https://docs.docker.com/docker-for-mac/install/)
 
+OR
+
+- Pipenv
+- Pip
+
 # Local Development
 
 Start the dev server for local development:
@@ -24,6 +29,12 @@ docker-compose run --rm web [command]
 pipenv install
 python manage.py migrate
 python manage.py runserver
+```
+
+To seed the db with devices use the command
+
+```bash
+python manage.py seed
 ```
 
 # Files of Interest

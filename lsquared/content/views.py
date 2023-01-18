@@ -39,6 +39,22 @@ class ImageListView(views.APIView):
 class ContentEventCreateView(views.APIView):
     permission_classes = (AllowAny,)
 
+    def editJSONFile(self, filepath, content_info):
+        with open(filepath, "r+") as json_file:
+            existing_content_json = json.load(json_file)
+            existing_content_json["content"].append(content_info)
+
+            json_file.seek(0)
+            json_file.write(json.dumps(existing_content_json))
+
+        json_file.close()
+
+    def createJSONFile(self, filepath, content_json):
+        with open(filepath, "x") as json_file:
+            json_file.write(json.dumps(content_json))
+
+        json_file.close()
+
     def post(self, request):
         """
         Creates JSON for every device
@@ -51,45 +67,39 @@ class ContentEventCreateView(views.APIView):
           et time
         }
         """
-
-        payload = request.data
-        devices_list = payload["devices"]
-        content_list = payload["content"]
-        json_folder_path = f"{os.getcwd()}/lsquared/content/json"
-        for device in devices_list:
-            for content in content_list:
-                content_event = ContentEventModel.objects.create(
-                    device_id=device["id"],
-                    content_name=content["name"],
-                    content_type=content["type"],
-                    content_size=content["size"],
-                    start_time=payload["st"],
-                    end_time=payload["et"],
-                )
-
+        try:
+            payload = request.data
+            devices_list = payload["devices"]
+            content_list = payload["content"]
+            json_folder_path = f"{os.getcwd()}/lsquared/content/json"
+            for device in devices_list:
                 json_file_path = f'{json_folder_path}/{device["name"]}.json'
                 file_exists = os.path.isfile(json_file_path)
-                if file_exists:
-                    with open(json_file_path, "r+") as json_file:
-                        content_json = json.load(json_file)
-                        content_json["content"].append(
-                            {
-                                "id": content_event.id,
-                                "type": content_event.content_type,
-                                "fileSize": content_event.content_size,
-                                "fileName": content_event.content_name,
-                                "st": content_event.start_time,
-                                "et": content_event.end_time,
-                            }
-                        )
-                        json_file.write(json.dumps(content_json))
 
-                        print(content_json)
+                for content in content_list:
+                    content_event = ContentEventModel.objects.create(
+                        device_id=device["id"],
+                        content_name=content["name"],
+                        content_type=content["type"],
+                        content_size=content["size"],
+                        start_time=payload["st"],
+                        end_time=payload["et"],
+                    )
 
-                    json_file.close()
+                    if file_exists:
 
-                else:
-                    with open(json_file_path, "x") as json_file:
+                        content_info = {
+                            "id": content_event.id,
+                            "type": content_event.content_type,
+                            "fileSize": content_event.content_size,
+                            "fileName": content_event.content_name,
+                            "st": content_event.start_time,
+                            "et": content_event.end_time,
+                        }
+
+                        self.editJSONFile(json_file_path, content_info)
+
+                    else:
                         content_json = {
                             "device": {
                                 "info": {"id": device["id"], "name": device["name"]}
@@ -105,18 +115,8 @@ class ContentEventCreateView(views.APIView):
                                 }
                             ],
                         }
-                        json_file.write(json.dumps(content_json))
-                    json_file.close()
+                        self.createJSONFile(json_file_path, content_json)
 
-        print(payload)
-
-        # Save data to table with
-        # id, deviceid, content_+name, content_type
-        # content_size, start_time, end_time
-
-        # create json for each device in payload
-        # if user submits post for device that already has content, add content to json
-
-        content = ContentEventModel.objects.all()
-
-        return Response(status=201)
+            return Response(status=201)
+        except Exception:
+            return Response(status=500)
